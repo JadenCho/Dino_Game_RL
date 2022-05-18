@@ -2,21 +2,8 @@ import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-import time
-
-#_chrome_options = webdriver.ChromeOptions()
-#_chrome_options.binary_location ='C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe' # File path where chrome.exe is
-#_chrome_options.add_argument("--mute-audio")
-#_chrome_options.add_argument('--no-sandbox')
-#_chrome_options.add_argument('--disable-dev-shm-usage')
-#_chrome_options.add_argument("--window-size=900,900")
-
-# Make sure that chromedriver.exe is in the same directory as this file
-#_driver = webdriver.Chrome('chromedriver', options=_chrome_options)
-#_driver.get('https://chromedino.com/')
-#time.sleep(2)
-#_driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.SPACE)
-#_driver.refresh()
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class Game():
 	def __init__(self, chrome_path):
@@ -26,18 +13,32 @@ class Game():
 		self.chrome_options.add_argument('--no-sandbox')
 		self.chrome_options.add_argument('--disable-dev-shm-usage')
 		self.chrome_options.add_argument("--window-size=900,900")
-		self.driver = None
+		self.driver = webdriver.Chrome('chromedriver', options=self.chrome_options)
 
 	def Start(self):
-		self.driver = webdriver.Chrome('chromedriver', options=self.chrome_options)
 		self.driver.get('https://chromedino.com/')
+		WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "runner-canvas")))
+		self.Up_Action()
 
 	def Up_Action(self):
 		self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.SPACE)
 
-if __name__ == "__main__":
-	path = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
-	game = Game(chrome_path=path)
-	game.Start()
-	time.sleep(2)
-	game.Up_Action()
+	def Down_Action(self):
+		self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_DOWN)
+
+	def Nothing_Action(self):
+		self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_RIGHT)
+
+	def Refresh(self):
+		self.driver.refresh()
+		WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "runner-canvas")))
+
+	def Restart(self):
+		self.Refresh()
+		self.Up_Action()
+
+	def Get_Score(self):
+		score = self.driver.execute_script("return Runner.instance_.distanceMeter.digits")
+		score = ''.join(score)
+
+		return int(score)
