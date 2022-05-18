@@ -23,7 +23,7 @@ class DinoEnv(gym.Env):
 
 		self.game = Game(chrome_path)
 
-		self.action_list = [Keys.ARROW_RIGHT, Keys.ARROW_UP, Keys.ARROW_DOWN]		
+		self.action_list = [Keys.ARROW_LEFT, Keys.ARROW_UP, Keys.ARROW_DOWN]		
 
 	def Env_Start(self):
 		'''
@@ -41,11 +41,14 @@ class DinoEnv(gym.Env):
 
 		done = self.done_state()
 
-		reward = 1 if not done else -10
+		reward = 1 if not done else -100
 
 		score = self.game.Get_Score()
+		#print(score)
 
-		return next_state, done, reward, Get_Score
+		time.sleep(0.15)
+
+		return next_state, reward, done, score
 
 	def reset(self):
 		'''
@@ -79,7 +82,7 @@ class DinoEnv(gym.Env):
 			return np.stack([img] * 4, axis=-1)
 		else:
 			return np.stack(self.state_queue, axis=-1)
-		return img
+		#return img
 
 	def Score(self):
 		'''
