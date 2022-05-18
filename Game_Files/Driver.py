@@ -10,6 +10,7 @@ class Game():
 		self.chrome_options = webdriver.ChromeOptions()
 		self.chrome_options.binary_location =chrome_path # File path where chrome.exe is
 		self.chrome_options.add_argument("--mute-audio")
+		#self.chrome_options.add_argument("--headless")
 		self.chrome_options.add_argument('--no-sandbox')
 		self.chrome_options.add_argument('--disable-dev-shm-usage')
 		self.chrome_options.add_argument("--window-size=900,900")
@@ -17,17 +18,18 @@ class Game():
 
 	def Start(self):
 		self.driver.get('https://chromedino.com/')
-		WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "runner-canvas")))
-		self.Up_Action()
 
-	def Up_Action(self):
-		self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.SPACE)
+	#def Up_Action(self):
+	#	self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.SPACE)
 
-	def Down_Action(self):
-		self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_DOWN)
+	#def Down_Action(self):
+	#	self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_DOWN)
 
-	def Nothing_Action(self):
-		self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_RIGHT)
+	#def Nothing_Action(self):
+	#	self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_RIGHT)
+
+	def Action(self, action):
+		self.driver.find_element(By.TAG_NAME, 'body').send_keys(action)
 
 	def Refresh(self):
 		self.driver.refresh()
@@ -35,10 +37,18 @@ class Game():
 
 	def Restart(self):
 		self.Refresh()
-		self.Up_Action()
+		self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.SPACE)
 
 	def Get_Score(self):
 		score = self.driver.execute_script("return Runner.instance_.distanceMeter.digits")
 		score = ''.join(score)
 
 		return int(score)
+
+	def Img_State(self):
+		img = self.driver.execute_script("return document.querySelector('canvas.runner-canvas').toDataURL()")
+		return img
+
+	def Done_State(self):
+
+		return not self.driver.execute_script("return Runner.instance_.playing")
