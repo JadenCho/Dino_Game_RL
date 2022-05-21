@@ -58,7 +58,7 @@ def OurModel(input_shape, action_space):
 
     model = tf.keras.models.Model(inputs=[input], outputs=[d])
     
-    model.compile(loss="mse", optimizer=Adam(learning_rate=0.0025), metrics=["accuracy"]) 
+    model.compile(loss="mse", optimizer=Adam(learning_rate=0.01), metrics=["accuracy"]) 
 
     # model.summary()
     return model
@@ -69,7 +69,7 @@ class DQNAgent:
         self.state_size = self.env.observation_space.shape
         #self.state_size = (120, 120, 4)
         self.action_size = self.env.action_space.n
-        self.EPISODES = 100 
+        self.EPISODES = 1000
         self.memory = deque(maxlen=2000)
         
         self.gamma = 0.95    # discount rate
@@ -77,7 +77,7 @@ class DQNAgent:
         self.epsilon_min = 0.001
         self.epsilon_decay = 0.999
         self.batch_size = 128
-        self.train_start = 2000
+        self.train_start = 1000
 
         # create main model
         self.Target_model = OurModel(input_shape=self.state_size, action_space = self.action_size) 
@@ -149,7 +149,8 @@ class DQNAgent:
 
         # Train the Neural Network with batches where target is the value function
         targets = np.asarray(targets) 
-        self.Train_model.fit(state, targets, batch_size=self.batch_size, verbose=0) 
+        self.Train_model.fit(state, targets, batch_size=self.batch_size, verbose=0)
+        #self.memory = deque(maxlen=2000)
 
     def load(self, name):
         self.model = load_model(name)
@@ -160,9 +161,9 @@ class DQNAgent:
     def training(self):
         max = 0 
         total_r = [] 
-        count = 25 
+        count = 50
         start = time.time() 
-        self.env.Env_Start()
+        #self.env.Env_Start()
 
         for e in range(self.EPISODES):
             time.sleep(1.5)

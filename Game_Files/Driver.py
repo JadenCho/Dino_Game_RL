@@ -16,12 +16,15 @@ class Game():
 		#self.chrome_options.setExperimentalOption("excludeSwitches",Arrays.asList("disable-popup-blocking"));
 		self.chrome_options.add_argument('start-maximized')
 		self.driver = webdriver.Chrome('chromedriver', options=self.chrome_options)
+		#self.driver.get('https://chromedino.com/')
+		self.driver.get('https://tuckercraig.com/dino/')
+		#self.driver.get('chrome://dino')
 
 	def Start(self):
 		'''
 		Open the Game Instance in Chrome
 		'''
-		self.driver.get('https://chromedino.com/')
+		self.driver.get('https://tuckercraig.com/dino/')
 
 	def Action(self, action):
 		'''
@@ -40,6 +43,7 @@ class Game():
 		'''
 		Refresh the Chrome Tab and start the game again
 		'''
+		WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "runner-canvas")))
 		self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.SPACE)
 
 	def Get_Score(self):

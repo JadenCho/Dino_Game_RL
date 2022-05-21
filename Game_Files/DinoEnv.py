@@ -44,11 +44,8 @@ class DinoEnv(gym.Env):
 		reward = 1 if not done else -100
 
 		score = self.game.Get_Score()
-		#print(score)
 
-		time.sleep(0.15)
-
-		return next_state, reward, done, score
+		return next_state, reward, done, {'score': score}
 
 	def reset(self):
 		'''
@@ -73,7 +70,7 @@ class DinoEnv(gym.Env):
 		Processes the image of the state
 		'''
 		img = cv2.cvtColor(self.get_state_img(), cv2.COLOR_BGR2GRAY)
-		img = img[:, :150] # Cropping
+		img = img[:500, :480] # Cropping
 		img = cv2.resize(img, (self.screen_width, self.screen_height)) # Resize
 
 		self.state_queue.append(img)
@@ -96,3 +93,16 @@ class DinoEnv(gym.Env):
 		Check and return whether the Dino has crashed or not
 		'''
 		return self.game.Done_State()
+
+#if __name__ == "__main__":
+#	path = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+#	d = DinoEnv(chrome_path=path)
+#	state = d.reset()
+#	img = []
+#	img.append(state)
+#	for i in range(15):
+#		next_state, reward, done, _ = d.step(1)
+#		img.append(next_state)
+#		plt.figure(i)
+#		plt.imshow(img[i])
+#	plt.show()
