@@ -8,17 +8,14 @@ from selenium.webdriver.support import expected_conditions as EC
 class Game():
 	def __init__(self, chrome_path):
 		self.chrome_options = webdriver.ChromeOptions()
-		self.chrome_options.binary_location =chrome_path # File path where chrome.exe is
+		self.chrome_options.binary_location = chrome_path # File path where chrome.exe is
 		self.chrome_options.add_argument("--mute-audio")
 		#self.chrome_options.add_argument("--headless")
 		self.chrome_options.add_argument('--no-sandbox')
 		self.chrome_options.add_argument('--disable-dev-shm-usage')
-		#self.chrome_options.setExperimentalOption("excludeSwitches",Arrays.asList("disable-popup-blocking"));
 		self.chrome_options.add_argument('start-maximized')
 		self.driver = webdriver.Chrome('chromedriver', options=self.chrome_options)
-		#self.driver.get('https://chromedino.com/')
 		self.driver.get('https://tuckercraig.com/dino/')
-		#self.driver.get('chrome://dino')
 
 	def Start(self):
 		'''
