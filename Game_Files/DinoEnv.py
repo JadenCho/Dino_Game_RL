@@ -6,6 +6,7 @@ from gym import spaces
 from io import BytesIO
 from PIL import Image
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 import base64
 import cv2
 import time
@@ -23,7 +24,10 @@ class DinoEnv(gym.Env):
 
 		self.game = Game(chrome_path)
 
-		self.action_list = [Keys.ARROW_LEFT, Keys.ARROW_UP, Keys.ARROW_DOWN]		
+		self.action_list = [Keys.ARROW_LEFT, Keys.ARROW_UP, Keys.ARROW_DOWN]
+		action_ = ActionChains(self.game.driver)
+		self.key_press = [action_.key_down(act) for act in self.action_list]
+		self.key_unpress = [action_.key_up(act) for act in self.action_list]
 
 	def Env_Start(self):
 		'''
@@ -44,6 +48,8 @@ class DinoEnv(gym.Env):
 		reward = 1 if not done else -100
 
 		score = self.game.Get_Score()
+
+		#time.sleep(0.02)
 
 		return next_state, reward, done, {'score': score}
 
@@ -70,7 +76,7 @@ class DinoEnv(gym.Env):
 		Processes the image of the state
 		'''
 		img = cv2.cvtColor(self.get_state_img(), cv2.COLOR_BGR2GRAY)
-		img = img[:500, :480] # Cropping
+		img = img[:, :480] # Cropping
 		img = cv2.resize(img, (self.screen_width, self.screen_height)) # Resize
 
 		self.state_queue.append(img)
