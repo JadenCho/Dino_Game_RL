@@ -50,7 +50,7 @@ class Game():
 		score = self.driver.execute_script("return Runner.instance_.distanceMeter.digits")
 		score = ''.join(score)
 
-		return int(score)
+		return score
 
 	def Img_State(self):
 		'''
