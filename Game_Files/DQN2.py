@@ -5,6 +5,8 @@ import math
 from stable_baselines3 import DQN
 from stable_baselines3.dqn.policies import CnnPolicy
 from stable_baselines3.common.vec_env import DummyVecEnv
+import numpy as np
+import matplotlib.pyplot as plt
 
 class DQN_():
 	def __init__(self, width=120, height=120, chrome_path=None):

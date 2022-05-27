@@ -10,7 +10,7 @@ class Game():
 		self.chrome_options = webdriver.ChromeOptions()
 		self.chrome_options.binary_location = chrome_path # File path where chrome.exe is
 		self.chrome_options.add_argument("--mute-audio")
-		#self.chrome_options.add_argument("--headless")
+		self.chrome_options.add_argument("--headless")
 		self.chrome_options.add_argument('--no-sandbox')
 		self.chrome_options.add_argument('--disable-dev-shm-usage')
 		self.chrome_options.add_argument('start-maximized')

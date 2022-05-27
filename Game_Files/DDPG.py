@@ -1,6 +1,8 @@
 import math
 import os
 import time
+import numpy as np
+import matplotlib.pyplot as plt
 
 from stable_baselines3 import DDPG
 from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
@@ -22,11 +24,11 @@ class DDPG_():
 		#self.env.Env_Start()
 		print('Begin training...')
 		start_train = time.time()
-		self.model.learn(total_timesteps=750000)
+		self.model.learn(total_timesteps=100000)
 		self.model.save(self.save)
 
 		end_train = time.time()
-		self.test_env = DummyVecEnv([self.env_fnc])
+		self.test_env = DummyVecEnv([lambda : DinoEnv_box_action(width=120, height=120, chrome_path=self.path)])
 		self.model = DDPG.load(self.save, env=self.test_env)
 		
 		print('Begin Test Runs...')
@@ -48,7 +50,7 @@ class DDPG_():
 					total_r.append(r)
 					#state = self.env.reset()
 
-		elapse = np.abs(start-end) 
+		elapse = np.abs(start_train-end_train) 
 		hour = elapse/3600 
 		minute = np.abs(elapse - (math.floor(hour) * 3600))/60 
 		seconds = np.abs(minute - math.floor(minute)) * 60 
